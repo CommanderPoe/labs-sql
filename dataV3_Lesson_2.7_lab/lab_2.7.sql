@@ -4,7 +4,7 @@ USE sakila;
 SELECT * FROM category;
 SELECT * FROM film_category;
 
-SELECT scat.name, COUNT(scat.name) AS count
+SELECT scat.name, COUNT(scat.name) AS category
 FROM sakila.category as scat
 JOIN sakila.film_category as sfcat
 USING (category_id)
@@ -75,16 +75,18 @@ USING(film_id)
 GROUP BY sf.film_id
 ORDER BY actors DESC;
 
--- Using the tables payment and customer and the JOIN command, list the total paid by each customer. List the customers alphabetically by last name.
-SELECT CONCAT(c.first_name,' ',c.last_name) AS Customer, SUM(p.amount) AS Paid_by_Customer
-FROM sakila.payment p
-JOIN sakila.customer c
-USING (customer_id)
-GROUP BY Customer;
 
--- List number of films per category.
-SELECT c.category_id AS Category, COUNT(f.film_id) AS Nb_of_Films
-FROM sakila.film_category c   
-JOIN sakila.film f 
-USING (film_id)
-GROUP BY c.category_id;
+-- 7. Using the tables payment and customer and the JOIN command, list the total paid by each customer. 
+-- List the customers alphabetically by last name.
+SELECT * FROM payment;
+SELECT * FROM customer;
+
+SELECT customer_id, CONCAT(sc.last_name,' ',sc.first_name) as name, SUM(amount) as total_paid
+FROM sakila.payment as sp
+JOIN sakila.customer as sc
+USING(customer_id)
+GROUP BY sp.customer_id
+ORDER BY sc.last_name;
+
+-- 8. List number of films per category
+'''DONE ALREADY in #2'''
