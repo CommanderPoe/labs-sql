@@ -93,7 +93,7 @@ LEFT JOIN sakila.inventory AS s_inventory
 USING(film_id)
 WHERE s_film.title = 'Academy Dinosaur';
 
--- 7. Get all pairs of actors that worked together.
+-- 7. Get all pairs of actors that worked together. SUB-QUERIES????
 SELECT * FROM actor;
 SELECT * FROM film_actor;
 SELECT * FROM film;
@@ -104,13 +104,22 @@ JOIN sakila.film_actor AS s_factor
 USING(actor_id);
 
 SELECT *
-FROM film_actor AS fa1
-JOIN film_actor AS fa2
-ON (fa1.film_id = fa2.film_id) AND (fa1.actor_id <> fa2.actor_id)
-JOIN actor AS a
-ON a.actor_id = f1.actor_id
-JOIN actor AS a2
-ON a2.actor_id = fa2.actor_id;
+FROM sakila.film_actor AS sfa1
+JOIN sakila.film_actor AS sfa2
+ON (sfa1.film_id = sfa2.film_id) AND (sfa1.actor_id <> sfa2.actor_id)
+JOIN sakila.actor AS sa1
+ON sa1.actor_id = sfa1.actor_id
+JOIN sakila.actor AS sa2
+ON sa2.actor_id = sfa2.actor_id;
+
+SELECT sfa1.actor_id, sfa1.film_id, CONCAT(sa1.first_name,' ',sa1.last_name) AS name,  sa2.actor_id AS id_2, CONCAT(sa2.first_name,' ',sa2.last_name) AS name_2
+FROM sakila.film_actor AS sfa1
+JOIN sakila.film_actor AS sfa2
+ON (sfa1.film_id = sfa2.film_id) AND (sfa1.actor_id <> sfa2.actor_id)
+JOIN sakila.actor AS sa1
+ON sa1.actor_id = sfa1.actor_id
+JOIN sakila.actor AS sa2
+ON sa2.actor_id = sfa2.actor_id;
 
 SELECT actor_id, first_name, COUNT(film_id) 
 FROM sakila.actor AS s_actor
